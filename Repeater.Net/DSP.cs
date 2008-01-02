@@ -29,14 +29,21 @@ namespace DSP
 	public class Goertzel
 	{
 
+		private double coeff=0;
+		private double Q1=0;
+		private double Q2=0;
+		private double sine=0;
+		private double cosine=0;
+
+		char[] testData;
+
+
 		public Goertzel()
 			{
-
 			InitGoertzel();
 			}
 
 		private double _Frequency;
-
 		public double Frequency
 			{
 			get
@@ -48,8 +55,8 @@ namespace DSP
 				_Frequency = value;
 				}
 			}
+		
 		private double  _SamplingRate = 8000;
-
 		public double  SamplingRate
 			{
 			get
@@ -63,7 +70,6 @@ namespace DSP
 			}
 
 		private uint _BlockSize=205;
-
 		public uint BlockSize
 			{
 			get
@@ -76,16 +82,11 @@ namespace DSP
 				}
 			}
 	
-		static double coeff;
-		static double Q1;
-		static double Q2;
-		static double sine;
-		static double cosine;
+		
 
-char[] testData;
 
 /* Call this routine before every "block" (size=N) of samples. */
-static void ResetGoertzel()
+private void ResetGoertzel()
 {
   Q2 = 0;
   Q1 = 0;
@@ -114,7 +115,7 @@ public void InitGoertzel()
 }
 
 /* Call this routine for every sample. */
-		static void ProcessSample(char sample)
+private void ProcessSample(char sample)
 {
   double Q0;
   Q0 = coeff * Q1 - Q2 + sample;
@@ -125,7 +126,7 @@ public void InitGoertzel()
 
 /* Basic Goertzel */
 /* Call this routine after every block to get the complex result. */
-		static void GetRealImag(ref double realPart, ref double imagPart)
+public void GetRealImag(ref double realPart, ref double imagPart)
 {
   realPart = (Q1 - Q2 * cosine);
   imagPart = (Q2 * sine);
@@ -159,7 +160,7 @@ private void Generate(double frequency)
 }
 
 /* Demo 1 */
-private void GenerateAndTest(double frequency)
+public void GenerateAndTest(double frequency)
 {
   int	index;
 
@@ -200,7 +201,7 @@ private void GenerateAndTest(double frequency)
 }
 
 /* Demo 2 */
-private void GenerateAndTest2(double frequency)
+public void GenerateAndTest2(double frequency)
 {
   int	index;
 

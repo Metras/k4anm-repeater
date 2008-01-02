@@ -2,14 +2,14 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Repeater.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="IDString" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">dah dit dah,dit dit dit dah,dit dah,dah dit ,dah dah</Value>
-    </Setting>
     <Setting Name="PTTCommPort" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">COM1</Value>
+      <Value Profile="(Default)">COM8</Value>
     </Setting>
     <Setting Name="IDTimeout" Type="System.Int32" Scope="Application">
-      <Value Profile="(Default)">300</Value>
+      <Value Profile="(Default)">10</Value>
+    </Setting>
+    <Setting Name="IDString" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">This is the K4ANM Repeater System. A 203.5 Hurtz tone is required.</Value>
     </Setting>
   </Settings>
 </SettingsFile>

@@ -25,16 +25,7 @@ namespace Repeater.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("dah dit dah,dit dit dit dah,dit dah,dah dit ,dah dah")]
-        public string IDString {
-            get {
-                return ((string)(this["IDString"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("COM1")]
+        [global::System.Configuration.DefaultSettingValueAttribute("COM8")]
         public string PTTCommPort {
             get {
                 return ((string)(this["PTTCommPort"]));
@@ -43,10 +34,19 @@ namespace Repeater.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("300")]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
         public int IDTimeout {
             get {
                 return ((int)(this["IDTimeout"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("This is the K4ANM Repeater System. A 203.5 Hurtz tone is required.")]
+        public string IDString {
+            get {
+                return ((string)(this["IDString"]));
             }
         }
     }

@@ -25,10 +25,12 @@ using System.ServiceProcess;
 using System.Diagnostics;
 using System.IO.Ports;
 using System.Timers;
+using System.Threading;
+using DSP;
 
 public class RepeaterService :ServiceBase
 	{
-	private Timer timer;
+	private System.Timers.Timer timer;
 	private SerialPort PTTPort = new SerialPort(Repeater.Properties.Settings.Default.PTTCommPort);
 	
 	private WaveLib.WaveOutPlayer m_Player;
@@ -40,7 +42,7 @@ public class RepeaterService :ServiceBase
 	private int TimeSincePTT = 0;
 	private int IDTimeout = Repeater.Properties.Settings.Default.IDTimeout;
 	private int IDTimer = 0;
-
+	private Goertzel gt = new Goertzel();
 
 	public static void Main()
 		{
@@ -51,19 +53,18 @@ public class RepeaterService :ServiceBase
 		{
 		CanPauseAndContinue = true;
 		ServiceName = "K4ANM Repeater Service";
+		PTTPort.Handshake = Handshake.None;
 
 		sp = new SpeechLib.SpVoiceClass();
 
 		//the housekeeping timer
-		timer = new Timer();
+		timer = new System.Timers.Timer();
 		timer.Interval = 1000; 
 		timer.Elapsed += new ElapsedEventHandler(OnTimer);
 
-		//startup announcement
-		PTT(true);
-		sp.Speak(Repeater.Properties.Settings.Default.IDString, SpeechLib.SpeechVoiceSpeakFlags.SVSFDefault);
-		PTT(false);
 		
+		
+				
 		}
 	//play the samples in the  FIFO buffer 
 	private void Filler(IntPtr data, int size)
@@ -131,12 +132,18 @@ public class RepeaterService :ServiceBase
 		{
 		EventLog.WriteEntry("K4ANM Repeater Service started");
 		timer.Enabled = true;
+		PTTPort.Open();
 		Start();
+		//startup announcement
+		PTT(true);
+		sp.Speak(Repeater.Properties.Settings.Default.IDString, SpeechLib.SpeechVoiceSpeakFlags.SVSFDefault);
+		PTT(false);
 		}
 
 	protected override void OnStop()
 		{
 		EventLog.WriteEntry("K4ANM Repeater Service stopped");
+		PTTPort.Close();
 		Stop();
 		timer.Enabled = false;
 		}
@@ -163,8 +170,11 @@ public class RepeaterService :ServiceBase
 		//Hang Timer
 		//
 		//Do Station ID
-		if (IDTimer >= IDTimeout)
-			DoID();
+			if (IDTimer >= IDTimeout)
+			{
+				IDTimer = 0;
+				DoID();
+			}
 
 		IDTimer++;
 		TimeSincePTT++;
@@ -175,14 +185,16 @@ public class RepeaterService :ServiceBase
 		switch (state)
 			{
 			case (true):
+							
 				PTTPort.DtrEnable = true;
 				PTTPort.RtsEnable = true;
-				PTTPort.Open();
+				Thread.Sleep(100);
 				break;
 			case (false):
+				Thread.Sleep(100);
 				PTTPort.DtrEnable = false;
 				PTTPort.RtsEnable = false;
-				PTTPort.Close();
+				//send roger beep here
 				TimeSincePTT = 0;
 				break;
 			default:
@@ -195,7 +207,7 @@ public class RepeaterService :ServiceBase
 		PTT(true);
 		sp.Speak(Repeater.Properties.Settings.Default.IDString, SpeechLib.SpeechVoiceSpeakFlags.SVSFDefault);
 		PTT(false);
-		IDTimer = 0;
+		
 		}
 
 
