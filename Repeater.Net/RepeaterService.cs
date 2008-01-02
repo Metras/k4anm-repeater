@@ -51,17 +51,21 @@ public class RepeaterService :ServiceBase
 		{
 		CanPauseAndContinue = true;
 		ServiceName = "K4ANM Repeater Service";
+
 		sp = new SpeechLib.SpVoiceClass();
+
+		//the housekeeping timer
 		timer = new Timer();
-		
-		timer.Interval = 1000;
+		timer.Interval = 1000; 
 		timer.Elapsed += new ElapsedEventHandler(OnTimer);
+
+		//startup announcement
 		PTT(true);
 		sp.Speak(Repeater.Properties.Settings.Default.IDString, SpeechLib.SpeechVoiceSpeakFlags.SVSFDefault);
 		PTT(false);
 		
 		}
-
+	//play the samples in the  FIFO buffer 
 	private void Filler(IntPtr data, int size)
 		{
 		if (m_PlayBuffer == null || m_PlayBuffer.Length < size)
@@ -110,7 +114,8 @@ public class RepeaterService :ServiceBase
 		Stop();
 		try
 			{
-			WaveLib.WaveFormat fmt = new WaveLib.WaveFormat(11025, 16, 1);
+			//start the record and playback 
+			WaveLib.WaveFormat fmt = new WaveLib.WaveFormat(11025, 16, 1);//11025 b/s, 16 bits 1 channel
 			m_Player = new WaveLib.WaveOutPlayer(-1, fmt, 8192, 3, new WaveLib.BufferFillEventHandler(Filler));
 			m_Recorder = new WaveLib.WaveInRecorder(-1, fmt, 8192, 3, new WaveLib.BufferDoneEventHandler(DataArrived));
 			}
